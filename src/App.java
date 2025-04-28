@@ -35,20 +35,25 @@ public class App {
         inventoryList.qtyAdd(0);
         inventoryList.qtyAdd(1);
         inventoryList.qtyAdd(2);
+        ArrayListSaya<Pickaxe> listPickaxe = new ArrayListSaya<>();
+        listPickaxe.add(new WoodenPickaxe());
+        ArrayListSaya<Sword> listSword = new ArrayListSaya<>();
+        listSword.add(new WoodenSword());
+
 
         do {
             System.out.println("==========================");
-            System.out.println("<<       Minecraft      >>");
+            System.out.println("|       Minecraft        |");
             System.out.println("==========================");
             System.out.println("| Tools:                 |");
-            System.out.println("|                        |");
-            System.out.println("|                        |");
+            System.out.printf("|  - %-20s|\n", listPickaxe.get(0).name);
+            System.out.printf("|  - %-20s|\n", listSword.get(0).name);
             System.out.println("==========================");
             System.out.println("| 1. Inventory           |");
             System.out.println("| 2. Crafting Table      |");
             System.out.println("| 3. Go Mining           |");
             System.out.println("| 0. Exit                |");
-            System.out.println("==========================");
+            System.out.println("==========================");            
             do {                
                 System.out.print(">> ");
                 menu1 = scanI.nextInt();
@@ -183,6 +188,8 @@ public class App {
                                 currentCrafting[i][j] = craftingTable[i][j];
                             }
                         }
+                        listPickaxe.clear();
+                        listPickaxe.add(new StonePickaxe());
                     } else if(currentCrafting[1][4] == 'I' && currentCrafting[1][8] == 'I' && currentCrafting[1][12] == 'I' && currentCrafting[3][8] == 's' && currentCrafting[5][8] == 's') {
                         System.out.println("Iron Pickaxe crafted!");
                         for(int i = 0; i < 3; i++){
@@ -193,6 +200,8 @@ public class App {
                                 currentCrafting[i][j] = craftingTable[i][j];
                             }
                         }
+                        listPickaxe.clear();
+                        listPickaxe.add(new IronPickaxe());
                     } else if(currentCrafting[1][4] == 'D' && currentCrafting[1][8] == 'D' && currentCrafting[1][12] == 'D' && currentCrafting[3][8] == 's' && currentCrafting[5][8] == 's') {
                         System.out.println("Diamond Pickaxe crafted!");
                         for(int i = 0; i < 3; i++){
@@ -203,6 +212,8 @@ public class App {
                                 currentCrafting[i][j] = craftingTable[i][j];
                             }
                         }
+                        listPickaxe.clear();
+                        listPickaxe.add(new DiamondPickaxe());
                     } else if(currentCrafting[1][8] == 'S' && currentCrafting[3][8] == 'S' && currentCrafting[5][8] == 's') {
                         System.out.println("Stone Sword crafted!");
                         for(int i = 0; i < 2; i++){
@@ -213,6 +224,8 @@ public class App {
                                 currentCrafting[i][j] = craftingTable[i][j];
                             }
                         }
+                        listSword.clear();
+                        listSword.add(new StoneSword());
                     } else if(currentCrafting[1][8] == 'I' && currentCrafting[3][8] == 'I' && currentCrafting[5][8] == 's') {
                         System.out.println("Iron Sword crafted!");
                         for(int i = 0; i < 2; i++){
@@ -223,6 +236,8 @@ public class App {
                                 currentCrafting[i][j] = craftingTable[i][j];
                             }
                         }
+                        listSword.clear();
+                        listSword.add(new IronSword());
                     } else if(currentCrafting[1][8] == 'D' && currentCrafting[3][8] == 'D' && currentCrafting[5][8] == 's') {
                         System.out.println("Diamond Sword crafted!");
                         for(int i = 0; i < 2; i++){
@@ -233,6 +248,8 @@ public class App {
                                 currentCrafting[i][j] = craftingTable[i][j];
                             }
                         }
+                        listSword.clear();
+                        listSword.add(new DiamondSword());
                     }
 
                 } while (menuCrafting != 0);
@@ -246,7 +263,6 @@ public class App {
                 Boolean isUpLevel = true;
                 String inputPlay;
                 int levelOre = 1;
-                int level = 1;
                 int y = 4;
                 int x = 10;
                 int[] yEnemy = {0, 0, 0, 0, 0};
@@ -345,6 +361,7 @@ public class App {
                             int randEnemy = rand.nextInt(2);
                             jenisEnemy[i] = randEnemy;
                         }
+                        System.out.println("You've reached level 2!");
                         isUpLevel = false;
                     } else if(levelOre == 3 && isUpLevel){
                         for(int i = 0; i < mapGoMining.length; i++) {
@@ -396,20 +413,21 @@ public class App {
                             int randEnemy = rand.nextInt(3);
                             jenisEnemy[i] = randEnemy;
                         }
+                        System.out.println("You've reached level 3!");
                         isUpLevel = false;
                     }
                     for(int i = 0; i < 5; i++){
                         int randPosisi = rand.nextInt(4);
-                        if(randPosisi == 0 && currentMapGoMining[yEnemy[i]+1][xEnemy[i]] == ' '){
+                        if(randPosisi == 0 && (currentMapGoMining[yEnemy[i]+1][xEnemy[i]] == ' ' || currentMapGoMining[yEnemy[i]+1][xEnemy[i]] == 'P')){
                             currentMapGoMining[yEnemy[i]][xEnemy[i]] = ' ';
                             yEnemy[i]++;
-                        } else if(randPosisi == 1 && currentMapGoMining[yEnemy[i]-1][xEnemy[i]] == ' '){
+                        } else if(randPosisi == 1 && (currentMapGoMining[yEnemy[i]-1][xEnemy[i]] == ' ' || currentMapGoMining[yEnemy[i]-1][xEnemy[i]] == 'P')){
                             currentMapGoMining[yEnemy[i]][xEnemy[i]] = ' ';
                             yEnemy[i]--;
-                        } else if(randPosisi == 2 && currentMapGoMining[yEnemy[i]][xEnemy[i]+1] == ' '){
+                        } else if(randPosisi == 2 && (currentMapGoMining[yEnemy[i]][xEnemy[i]+1] == ' ' || currentMapGoMining[yEnemy[i]][xEnemy[i]+1] == 'P')){
                             currentMapGoMining[yEnemy[i]][xEnemy[i]] = ' ';
                             xEnemy[i]++;
-                        } else if(randPosisi == 3 && currentMapGoMining[yEnemy[i]][xEnemy[i]-1] == ' '){
+                        } else if(randPosisi == 3 && (currentMapGoMining[yEnemy[i]][xEnemy[i]-1] == ' ' || currentMapGoMining[yEnemy[i]][xEnemy[i]-1] == 'P')){
                             currentMapGoMining[yEnemy[i]][xEnemy[i]] = ' ';
                             xEnemy[i]--;
                         }
@@ -443,47 +461,191 @@ public class App {
                         System.out.println();
                     }
                     if(levelOre == 1){
-                        System.out.println("Level: " + level + "/3 (Stone Mine)");
+                        System.out.println("Level: " + levelOre + "/3 (Stone Mine)");
                     } else if(levelOre == 2){
-                        System.out.println("Level: " + level + "/3 (Iron Mine)");
+                        System.out.println("Level: " + levelOre + "/3 (Iron Mine)");
                     } else if(levelOre == 3){
-                        System.out.println("Level: " + level + "/3 (Diamond Mine)");
+                        System.out.println("Level: " + levelOre + "/3 (Diamond Mine)");
                     }
                     System.out.println("(wasd): Move Player");
                     System.out.println("(e): Exit Mining");
                     System.out.println("=====================");
                     System.out.print(">> ");
                     inputPlay = scanS.nextLine();
-                    if(inputPlay.equals("w") && (currentMapGoMining[y-1][x] == ' ' || currentMapGoMining[y-1][x] == 'O')){
+                    if(inputPlay.equals("w") && (currentMapGoMining[y-1][x] == ' ' || currentMapGoMining[y-1][x] == 'O' || currentMapGoMining[y-1][x] == '@' || currentMapGoMining[y-1][x] == '+' || currentMapGoMining[y-1][x] == '*')){
                         currentMapGoMining[y][x] = ' ';
                         y--;
+                        if(currentMapGoMining[y][x] == '@'){
+                            if(listPickaxe.get(0).level < 1){
+                                y++;
+                                currentMapGoMining[y][x] = '@';
+                                System.out.println("You found some stone!");
+                                System.out.println("You " + listPickaxe.get(0).name + " isn't strong enough to mine stone!");
+                            } else {
+                                System.out.println("You found some stone!");
+                                System.out.println("You mined the stone with your " + listPickaxe.get(0).name);
+                                inventoryList.qtyAdd(0);
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == '+'){
+                            if(listPickaxe.get(0).level < 2){
+                                y++;
+                                currentMapGoMining[y][x] = '+';
+                                System.out.println("You found some iron!");
+                                System.out.println("You " + listPickaxe.get(0).name + " isn't strong enough to mine iron!");
+                            } else {
+                                System.out.println("You found some iron!");
+                                System.out.println("You mined the iron with your " + listPickaxe.get(0).name);
+                                inventoryList.qtyAdd(1);
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == '*'){
+                            if(listPickaxe.get(0).level < 3){
+                                y++;
+                                currentMapGoMining[y][x] = '*';
+                                System.out.println("You found some diamond!");
+                                System.out.println("You " + listPickaxe.get(0).name + " isn't strong enough to mine diamond!");
+                            } else {
+                                System.out.println("You found some diamond!");
+                                System.out.println("You mined the diamond with your " + listPickaxe.get(0).name);
+                                inventoryList.qtyAdd(2);
+                            }
+                        }
                         if(currentMapGoMining[y][x] == 'O'){
                             isUpLevel = true;
                             levelOre++;
                             y = 4;
                             x = 10;
                         }
-                    } else if(inputPlay.equals("a") && (currentMapGoMining[y][x-1] == ' ' || currentMapGoMining[y][x-1] == 'O')){
+                    } else if(inputPlay.equals("a") && (currentMapGoMining[y][x-1] == ' ' || currentMapGoMining[y][x-1] == 'O' || currentMapGoMining[y][x-1] == '@' || currentMapGoMining[y][x-1] == '+' || currentMapGoMining[y][x-1] == '*')){
                         currentMapGoMining[y][x] = ' ';
                         x--;
+                        if(currentMapGoMining[y][x] == '@'){
+                            if(listPickaxe.get(0).level < 1){
+                                x++;
+                                currentMapGoMining[y][x] = '@';
+                                System.out.println("You found some stone!");
+                                System.out.println("You " + listPickaxe.get(0).name + " isn't strong enough to mine stone!");
+                            } else {
+                                System.out.println("You found some stone!");
+                                System.out.println("You mined the stone with your " + listPickaxe.get(0).name);
+                                inventoryList.qtyAdd(0);
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == '+'){
+                            if(listPickaxe.get(0).level < 2){
+                                x++;
+                                currentMapGoMining[y][x] = '+';
+                                System.out.println("You found some iron!");
+                                System.out.println("You " + listPickaxe.get(0).name + " isn't strong enough to mine iron!");
+                            } else {
+                                System.out.println("You found some iron!");
+                                System.out.println("You mined the iron with your " + listPickaxe.get(0).name);
+                                inventoryList.qtyAdd(1);
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == '*'){
+                            if(listPickaxe.get(0).level < 3){
+                                x++;
+                                currentMapGoMining[y][x] = '*';
+                                System.out.println("You found some diamond!");
+                                System.out.println("You " + listPickaxe.get(0).name + " isn't strong enough to mine diamond!");
+                            } else {
+                                System.out.println("You found some diamond!");
+                                System.out.println("You mined the diamond with your " + listPickaxe.get(0).name);
+                                inventoryList.qtyAdd(2);
+                            }
+                        }
                         if(currentMapGoMining[y][x] == 'O'){
                             isUpLevel = true;
                             levelOre++;
                             y = 4;
                             x = 10;
                         }
-                    } else if(inputPlay.equals("s") && (currentMapGoMining[y+1][x] == ' ' || currentMapGoMining[y+1][x] == 'O')){
+                    } else if(inputPlay.equals("s") && (currentMapGoMining[y+1][x] == ' ' || currentMapGoMining[y+1][x] == 'O' || currentMapGoMining[y+1][x] == '@' || currentMapGoMining[y+1][x] == '+' || currentMapGoMining[y+1][x] == '*')){
                         currentMapGoMining[y][x] = ' ';
                         y++;
+                        if(currentMapGoMining[y][x] == '@'){
+                            if(listPickaxe.get(0).level < 1){
+                                y--;
+                                currentMapGoMining[y][x] = '@';
+                                System.out.println("You found some stone!");
+                                System.out.println("You " + listPickaxe.get(0).name + " isn't strong enough to mine stone!");
+                            } else {
+                                System.out.println("You found some stone!");
+                                System.out.println("You mined the stone with your " + listPickaxe.get(0).name);
+                                inventoryList.qtyAdd(0);
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == '+'){
+                            if(listPickaxe.get(0).level < 2){
+                                y--;
+                                currentMapGoMining[y][x] = '+';
+                                System.out.println("You found some iron!");
+                                System.out.println("You " + listPickaxe.get(0).name + " isn't strong enough to mine iron!");
+                            } else {
+                                System.out.println("You found some iron!");
+                                System.out.println("You mined the iron with your " + listPickaxe.get(0).name);
+                                inventoryList.qtyAdd(1);
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == '*'){
+                            if(listPickaxe.get(0).level < 3){
+                                y--;
+                                currentMapGoMining[y][x] = '*';
+                                System.out.println("You found some diamond!");
+                                System.out.println("You " + listPickaxe.get(0).name + " isn't strong enough to mine diamond!");
+                            } else {
+                                System.out.println("You found some diamond!");
+                                System.out.println("You mined the diamond with your " + listPickaxe.get(0).name);
+                                inventoryList.qtyAdd(2);
+                            }
+                        }
                         if(currentMapGoMining[y][x] == 'O'){
                             isUpLevel = true;
                             levelOre++;
                             y = 4;
                             x = 10;
                         }
-                    } else if(inputPlay.equals("d") && (currentMapGoMining[y][x+1] == ' ' || currentMapGoMining[y][x+1] == 'O')){
+                    } else if(inputPlay.equals("d") && (currentMapGoMining[y][x+1] == ' ' || currentMapGoMining[y][x+1] == 'O' || currentMapGoMining[y][x+1] == '@' || currentMapGoMining[y][x+1] == '+' || currentMapGoMining[y][x+1] == '*')){
                         currentMapGoMining[y][x] = ' ';
                         x++;
+                        if(currentMapGoMining[y][x] == '@'){
+                            if(listPickaxe.get(0).level < 1){
+                                x--;
+                                currentMapGoMining[y][x] = '@';
+                                System.out.println("You found some stone!");
+                                System.out.println("You " + listPickaxe.get(0).name + " isn't strong enough to mine stone!");
+                            } else {
+                                System.out.println("You found some stone!");
+                                System.out.println("You mined the stone with your " + listPickaxe.get(0).name);
+                                inventoryList.qtyAdd(0);
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == '+'){
+                            if(listPickaxe.get(0).level < 2){
+                                x--;
+                                currentMapGoMining[y][x] = '+';
+                                System.out.println("You found some iron!");
+                                System.out.println("You " + listPickaxe.get(0).name + " isn't strong enough to mine iron!");
+                            } else {
+                                System.out.println("You found some iron!");
+                                System.out.println("You mined the iron with your " + listPickaxe.get(0).name);
+                                inventoryList.qtyAdd(1);
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == '*'){
+                            if(listPickaxe.get(0).level < 3){
+                                x--;
+                                currentMapGoMining[y][x] = '*';
+                                System.out.println("You found some diamond!");
+                                System.out.println("You " + listPickaxe.get(0).name + " isn't strong enough to mine diamond!");
+                            } else {
+                                System.out.println("You found some diamond!");
+                                System.out.println("You mined the diamond with your " + listPickaxe.get(0).name);
+                                inventoryList.qtyAdd(2);
+                            }
+                        }
                         if(currentMapGoMining[y][x] == 'O'){
                             isUpLevel = true;
                             levelOre++;
@@ -501,7 +663,36 @@ public class App {
                 }
                 System.out.println("Provide 5 materials.");
             } else if(menu1 == 222){
-
+                if(listPickaxe.get(0).level == 1){
+                    listPickaxe.clear();
+                    listPickaxe.add(new StonePickaxe());
+                    System.out.println("You upgrade in Stone Pickaxe!");
+                } else if(listPickaxe.get(0).level == 2){
+                    listPickaxe.clear();
+                    listPickaxe.add(new IronPickaxe());
+                    System.out.println("You upgrade in Iron Pickaxe!");
+                } else if(listPickaxe.get(0).level == 3){
+                    listPickaxe.clear();
+                    listPickaxe.add(new DiamondPickaxe());
+                    System.out.println("You upgrade in Diamond Pickaxe!");
+                } else if(listPickaxe.get(0).level >= 4){
+                    System.out.println("Max upgrade!");
+                }
+                if(listSword.get(0).level == 1){
+                    listSword.clear();
+                    listSword.add(new StoneSword());
+                    System.out.println("You upgrade in Stone Sword!");
+                } else if(listSword.get(0).level == 2){
+                    listSword.clear();
+                    listSword.add(new IronSword());
+                    System.out.println("You upgrade in Iron Sword!");
+                } else if(listSword.get(0).level == 3){
+                    listSword.clear();
+                    listSword.add(new DiamondSword());
+                    System.out.println("You upgrade in Diamond Sword!");
+                } else if(listSword.get(0).level >= 4){
+                    System.out.println("Max upgrade!");
+                }
             }
 
         } while (menu1 != 0);
