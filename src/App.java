@@ -95,13 +95,14 @@ public class App {
                     if(menuCrafting == 1) {
                         int pilihMat, row, column;
                         String rowColumn;
-                        Boolean isCukup = false;
+                        Boolean isCukup;
                         System.out.println("Select material to place:");
                         System.out.println("1. Stick (s)");
                         System.out.println("2. Stone (S): x" + inventoryList.getQty(0));
                         System.out.println("3. Iron (I): x" + inventoryList.getQty(1));
                         System.out.println("4. Diamond (D): x" + inventoryList.getQty(2));
-                        do {                            
+                        do {
+                            isCukup = false;
                             System.out.print(">> ");
                             pilihMat = scanI.nextInt();
                             if(pilihMat == 1 || inventoryList.getQty(pilihMat-2) > 0) {
@@ -110,31 +111,40 @@ public class App {
                                 System.out.println("You don't have any " + inventoryList.getItem(pilihMat-2));
                             }
                         } while (pilihMat < 1 || pilihMat > 4 || !isCukup);
-                        do {                            
+                        Boolean isSuccess;
+                        do {
+                            isSuccess = true;  
                             System.out.print("Enter coordinates (row,column): ");
                             rowColumn = scanS.nextLine();
+                            if(rowColumn.length() != 3){
+                                System.out.println("Invalid input!");
+                                isSuccess = false;
+                            }
                             row = Character.getNumericValue(rowColumn.charAt(0));
                             column = Character.getNumericValue(rowColumn.charAt(2));
                             if (row < 0 || row > 2 || column < 0 || column > 2) {
                                 System.out.println("Invalid coordinates!");
+                                isSuccess = false;
                             }
-                        } while ((row < 0 || row > 2) || (column < 0 || column > 2));
-                        if(row == 0) {
-                            row = 1;
-                        } else if(row == 1) {
-                            row = 3;
-                        } else if(row == 2) {
-                            row = 5;
-                        }
-
-                        if(column == 0) {
-                            column = 4;
-                        } else if(column == 1) {
-                            column = 8;
-                        } else if(column == 2) {
-                            column = 12;
-                        }
-
+                            if(row == 0) {
+                                row = 1;
+                            } else if(row == 1) {
+                                row = 3;
+                            } else if(row == 2) {
+                                row = 5;
+                            }
+                            if(column == 0) {
+                                column = 4;
+                            } else if(column == 1) {
+                                column = 8;
+                            } else if(column == 2) {
+                                column = 12;
+                            }
+                            if(currentCrafting[row][column] != '-'){
+                                System.out.println("The materials are already available on this map.");
+                                isSuccess = false;
+                            }
+                        } while (!isSuccess);
                         if(pilihMat == 1) {
                             currentCrafting[row][column] = 's';
                         } else if(pilihMat == 2) {
@@ -178,7 +188,7 @@ public class App {
                         }
                     }
 
-                    if(currentCrafting[1][4] == 'S' && currentCrafting[1][8] == 'S' && currentCrafting[1][12] == 'S' && currentCrafting[3][8] == 's' && currentCrafting[5][8] == 's') {
+                    if(currentCrafting[1][4] == 'S' && currentCrafting[1][8] == 'S' && currentCrafting[1][12] == 'S' && currentCrafting[3][8] == 's' && currentCrafting[5][8] == 's' && listPickaxe.get(0).level < 2) {
                         System.out.println("Stone Pickaxe crafted!");
                         for(int i = 0; i < 3; i++){
                             inventoryList.qtyMin(0);
@@ -190,7 +200,7 @@ public class App {
                         }
                         listPickaxe.clear();
                         listPickaxe.add(new StonePickaxe());
-                    } else if(currentCrafting[1][4] == 'I' && currentCrafting[1][8] == 'I' && currentCrafting[1][12] == 'I' && currentCrafting[3][8] == 's' && currentCrafting[5][8] == 's') {
+                    } else if(currentCrafting[1][4] == 'I' && currentCrafting[1][8] == 'I' && currentCrafting[1][12] == 'I' && currentCrafting[3][8] == 's' && currentCrafting[5][8] == 's' && listPickaxe.get(0).level < 3) {
                         System.out.println("Iron Pickaxe crafted!");
                         for(int i = 0; i < 3; i++){
                             inventoryList.qtyMin(1);
@@ -202,7 +212,7 @@ public class App {
                         }
                         listPickaxe.clear();
                         listPickaxe.add(new IronPickaxe());
-                    } else if(currentCrafting[1][4] == 'D' && currentCrafting[1][8] == 'D' && currentCrafting[1][12] == 'D' && currentCrafting[3][8] == 's' && currentCrafting[5][8] == 's') {
+                    } else if(currentCrafting[1][4] == 'D' && currentCrafting[1][8] == 'D' && currentCrafting[1][12] == 'D' && currentCrafting[3][8] == 's' && currentCrafting[5][8] == 's' && listPickaxe.get(0).level < 4) {
                         System.out.println("Diamond Pickaxe crafted!");
                         for(int i = 0; i < 3; i++){
                             inventoryList.qtyMin(2);
@@ -214,7 +224,7 @@ public class App {
                         }
                         listPickaxe.clear();
                         listPickaxe.add(new DiamondPickaxe());
-                    } else if(currentCrafting[1][8] == 'S' && currentCrafting[3][8] == 'S' && currentCrafting[5][8] == 's') {
+                    } else if(currentCrafting[1][8] == 'S' && currentCrafting[3][8] == 'S' && currentCrafting[5][8] == 's' && listSword.get(0).level < 2) {
                         System.out.println("Stone Sword crafted!");
                         for(int i = 0; i < 2; i++){
                             inventoryList.qtyMin(0);
@@ -226,7 +236,7 @@ public class App {
                         }
                         listSword.clear();
                         listSword.add(new StoneSword());
-                    } else if(currentCrafting[1][8] == 'I' && currentCrafting[3][8] == 'I' && currentCrafting[5][8] == 's') {
+                    } else if(currentCrafting[1][8] == 'I' && currentCrafting[3][8] == 'I' && currentCrafting[5][8] == 's' && listSword.get(0).level < 3) {
                         System.out.println("Iron Sword crafted!");
                         for(int i = 0; i < 2; i++){
                             inventoryList.qtyMin(1);
@@ -238,7 +248,7 @@ public class App {
                         }
                         listSword.clear();
                         listSword.add(new IronSword());
-                    } else if(currentCrafting[1][8] == 'D' && currentCrafting[3][8] == 'D' && currentCrafting[5][8] == 's') {
+                    } else if(currentCrafting[1][8] == 'D' && currentCrafting[3][8] == 'D' && currentCrafting[5][8] == 's' && listSword.get(0).level < 4) {
                         System.out.println("Diamond Sword crafted!");
                         for(int i = 0; i < 2; i++){
                             inventoryList.qtyMin(2);
@@ -261,6 +271,7 @@ public class App {
                     }
                 }
                 Boolean isUpLevel = true;
+                Boolean isDie = false;
                 String inputPlay;
                 int levelOre = 1;
                 int y = 4;
@@ -270,17 +281,7 @@ public class App {
                 int[] jenisEnemy = {0, 0, 0, 0, 0};
                 do {
                     if(levelOre == 1 && isUpLevel){
-                        Boolean isKosong = false;
-                        while(!isKosong){
-                            int randY = rand.nextInt(8) + 1;
-                            int randX = rand.nextInt(20) + 1;
-                            if(currentMapGoMining[randY][randX] == ' '){
-                                isKosong = true;
-                            }
-                            if(isKosong){
-                                currentMapGoMining[randY][randX] = 'O';
-                            }
-                        }
+                        Boolean isKosong;
                         for(int i = 0; i < 5; i++){
                             isKosong = false;
                             while(!isKosong){
@@ -300,7 +301,8 @@ public class App {
                                 int randY = rand.nextInt(8) + 1;
                                 int randX = rand.nextInt(20) + 1;
                                 for(int j = 0; j < 5; j++){
-                                    if(currentMapGoMining[randY][randX] == ' ' && randX != xEnemy[i] && randY != yEnemy[i]){
+                                    if(currentMapGoMining[randY][randX] == ' '){
+                                        currentMapGoMining[randY][randX]  = '1';
                                         isKosong = true;
                                     }
                                 }
@@ -310,14 +312,7 @@ public class App {
                                 }
                             }
                         }
-                        isUpLevel = false;
-                    } else if(levelOre == 2 && isUpLevel){
-                        for(int i = 0; i < mapGoMining.length; i++) {
-                            for(int j = 0; j < mapGoMining[0].length; j++) {
-                                currentMapGoMining[i][j] = mapGoMining[i][j];
-                            }
-                        }
-                        Boolean isKosong = false;
+                        isKosong = false;
                         while(!isKosong){
                             int randY = rand.nextInt(8) + 1;
                             int randX = rand.nextInt(20) + 1;
@@ -328,6 +323,14 @@ public class App {
                                 currentMapGoMining[randY][randX] = 'O';
                             }
                         }
+                        isUpLevel = false;
+                    } else if(levelOre == 2 && isUpLevel){
+                        for(int i = 0; i < mapGoMining.length; i++) {
+                            for(int j = 0; j < mapGoMining[0].length; j++) {
+                                currentMapGoMining[i][j] = mapGoMining[i][j];
+                            }
+                        }
+                        Boolean isKosong;
                         for(int i = 0; i < 5; i++){
                             isKosong = false;
                             while(!isKosong){
@@ -347,7 +350,8 @@ public class App {
                                 int randY = rand.nextInt(8) + 1;
                                 int randX = rand.nextInt(20) + 1;
                                 for(int j = 0; j < 5; j++){
-                                    if(currentMapGoMining[randY][randX] == ' ' && randX != xEnemy[i] && randY != yEnemy[i]){
+                                    if(currentMapGoMining[randY][randX] == ' '){
+                                        currentMapGoMining[randY][randX]  = '1';
                                         isKosong = true;
                                     }
                                 }
@@ -361,15 +365,7 @@ public class App {
                             int randEnemy = rand.nextInt(2);
                             jenisEnemy[i] = randEnemy;
                         }
-                        System.out.println("You've reached level 2!");
-                        isUpLevel = false;
-                    } else if(levelOre == 3 && isUpLevel){
-                        for(int i = 0; i < mapGoMining.length; i++) {
-                            for(int j = 0; j < mapGoMining[0].length; j++) {
-                                currentMapGoMining[i][j] = mapGoMining[i][j];
-                            }
-                        }
-                        Boolean isKosong = false;
+                        isKosong = false;
                         while(!isKosong){
                             int randY = rand.nextInt(8) + 1;
                             int randX = rand.nextInt(20) + 1;
@@ -380,6 +376,15 @@ public class App {
                                 currentMapGoMining[randY][randX] = 'O';
                             }
                         }
+                        System.out.println("You've reached level 2!");
+                        isUpLevel = false;
+                    } else if(levelOre == 3 && isUpLevel){
+                        for(int i = 0; i < mapGoMining.length; i++) {
+                            for(int j = 0; j < mapGoMining[0].length; j++) {
+                                currentMapGoMining[i][j] = mapGoMining[i][j];
+                            }
+                        }
+                        Boolean isKosong = false;
                         for(int i = 0; i < 5; i++){
                             isKosong = false;
                             while(!isKosong){
@@ -399,7 +404,8 @@ public class App {
                                 int randY = rand.nextInt(8) + 1;
                                 int randX = rand.nextInt(20) + 1;
                                 for(int j = 0; j < 5; j++){
-                                    if(currentMapGoMining[randY][randX] == ' ' && randX != xEnemy[i] && randY != yEnemy[i]){
+                                    if(currentMapGoMining[randY][randX] == ' '){
+                                        currentMapGoMining[randY][randX]  = '1';
                                         isKosong = true;
                                     }
                                 }
@@ -413,43 +419,58 @@ public class App {
                             int randEnemy = rand.nextInt(3);
                             jenisEnemy[i] = randEnemy;
                         }
+                        isKosong = false;
+                        while(!isKosong){
+                            int randY = rand.nextInt(8) + 1;
+                            int randX = rand.nextInt(20) + 1;
+                            if(currentMapGoMining[randY][randX] == ' '){
+                                isKosong = true;
+                            }
+                            if(isKosong){
+                                currentMapGoMining[randY][randX] = 'O';
+                            }
+                        }
                         System.out.println("You've reached level 3!");
                         isUpLevel = false;
                     }
                     for(int i = 0; i < 5; i++){
                         int randPosisi = rand.nextInt(4);
-                        if(randPosisi == 0 && (currentMapGoMining[yEnemy[i]+1][xEnemy[i]] == ' ' || currentMapGoMining[yEnemy[i]+1][xEnemy[i]] == 'P')){
-                            currentMapGoMining[yEnemy[i]][xEnemy[i]] = ' ';
-                            yEnemy[i]++;
-                        } else if(randPosisi == 1 && (currentMapGoMining[yEnemy[i]-1][xEnemy[i]] == ' ' || currentMapGoMining[yEnemy[i]-1][xEnemy[i]] == 'P')){
-                            currentMapGoMining[yEnemy[i]][xEnemy[i]] = ' ';
-                            yEnemy[i]--;
-                        } else if(randPosisi == 2 && (currentMapGoMining[yEnemy[i]][xEnemy[i]+1] == ' ' || currentMapGoMining[yEnemy[i]][xEnemy[i]+1] == 'P')){
-                            currentMapGoMining[yEnemy[i]][xEnemy[i]] = ' ';
-                            xEnemy[i]++;
-                        } else if(randPosisi == 3 && (currentMapGoMining[yEnemy[i]][xEnemy[i]-1] == ' ' || currentMapGoMining[yEnemy[i]][xEnemy[i]-1] == 'P')){
-                            currentMapGoMining[yEnemy[i]][xEnemy[i]] = ' ';
-                            xEnemy[i]--;
+                        if(yEnemy[i] == 0 && xEnemy[i] == 0){
+                            continue;
+                        } else {
+                            if (randPosisi == 0 && (currentMapGoMining[yEnemy[i] + 1][xEnemy[i]] == ' ' || currentMapGoMining[yEnemy[i] + 1][xEnemy[i]] == 'P')) {
+                                currentMapGoMining[yEnemy[i]][xEnemy[i]] = ' ';
+                                yEnemy[i] = yEnemy[i] + 1;
+                            } else if (randPosisi == 1 && (currentMapGoMining[yEnemy[i] - 1][xEnemy[i]] == ' ' || currentMapGoMining[yEnemy[i] - 1][xEnemy[i]] == 'P')) {
+                                currentMapGoMining[yEnemy[i]][xEnemy[i]] = ' ';
+                                yEnemy[i] = yEnemy[i] - 1;
+                            } else if (randPosisi == 2 && (currentMapGoMining[yEnemy[i]][xEnemy[i] + 1] == ' ' || currentMapGoMining[yEnemy[i]][xEnemy[i] + 1] == 'P')) {
+                                currentMapGoMining[yEnemy[i]][xEnemy[i]] = ' ';
+                                xEnemy[i] = xEnemy[i] + 1;
+                            } else if (randPosisi == 3 && (currentMapGoMining[yEnemy[i]][xEnemy[i] - 1] == ' ' || currentMapGoMining[yEnemy[i]][xEnemy[i] - 1] == 'P')) {
+                                currentMapGoMining[yEnemy[i]][xEnemy[i]] = ' ';
+                                xEnemy[i] = xEnemy[i] - 1;
+                            }
                         }
                     }
                     for(int i = 0; i < 5; i++){
-                        if(levelOre == 1){
+                        if (levelOre == 1 && yEnemy[i] != 0 && xEnemy[i] != 0) {
                             currentMapGoMining[yEnemy[i]][xEnemy[i]] = 'Z';
-                        } else if(levelOre == 2){
-                            if(jenisEnemy[i] == 0){
+                        } else if (levelOre == 2 && yEnemy[i] != 0 && xEnemy[i] != 0) {
+                            if (jenisEnemy[i] == 0) {
                                 currentMapGoMining[yEnemy[i]][xEnemy[i]] = 'Z';
                             } else {
                                 currentMapGoMining[yEnemy[i]][xEnemy[i]] = 'S';
                             }
-                        } else if(levelOre == 3){
-                            if(jenisEnemy[i] == 0){
+                        } else if (levelOre == 3 && yEnemy[i] != 0 && xEnemy[i] != 0) {
+                            if (jenisEnemy[i] == 0) {
                                 currentMapGoMining[yEnemy[i]][xEnemy[i]] = 'Z';
-                            } else if(jenisEnemy[i] == 1){
+                            } else if (jenisEnemy[i] == 1) {
                                 currentMapGoMining[yEnemy[i]][xEnemy[i]] = 'S';
-                            } else if(jenisEnemy[i] == 2){
+                            } else if (jenisEnemy[i] == 2) {
                                 currentMapGoMining[yEnemy[i]][xEnemy[i]] = 'C';
                             }
-                        }
+                        }                        
                     }
                     currentMapGoMining[y][x] = 'P';
                     System.out.println("=====================");
@@ -472,9 +493,63 @@ public class App {
                     System.out.println("=====================");
                     System.out.print(">> ");
                     inputPlay = scanS.nextLine();
-                    if(inputPlay.equals("w") && (currentMapGoMining[y-1][x] == ' ' || currentMapGoMining[y-1][x] == 'O' || currentMapGoMining[y-1][x] == '@' || currentMapGoMining[y-1][x] == '+' || currentMapGoMining[y-1][x] == '*')){
+                    if(inputPlay.equals("w") && (currentMapGoMining[y-1][x] == ' ' || currentMapGoMining[y-1][x] == 'O' || currentMapGoMining[y-1][x] == '@' || currentMapGoMining[y-1][x] == '+' || currentMapGoMining[y-1][x] == '*' || currentMapGoMining[y-1][x] == 'Z' || currentMapGoMining[y-1][x] == 'S' || currentMapGoMining[y-1][x] == 'C')){
                         currentMapGoMining[y][x] = ' ';
                         y--;
+                        if(currentMapGoMining[y][x] == 'Z'){
+                            if(listSword.get(0).level < 1){
+                                System.out.println("You encountered a Zombie!");
+                                System.out.println("You " + listSword.get(0).name + " isn't strong enough to defeat the Zombie!");
+                                System.out.println("You escape from the mine!");
+                                isDie = true;
+                                break;
+                            } else {
+                                System.out.println("You encountered a Zombie!");
+                                System.out.println("You defeated the Zombie using your " + listSword.get(0).name);
+                                for(int i = 0; i < 5; i++){
+                                    if(y == yEnemy[i] && x == xEnemy[i]){
+                                        yEnemy[i] = 0;
+                                        xEnemy[i] = 0;
+                                    }
+                                }
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == 'S'){
+                            if(listSword.get(0).level < 2){
+                                System.out.println("You encountered a Skeleton!");
+                                System.out.println("You " + listSword.get(0).name + " isn't strong enough to defeat the Skeleton!");
+                                System.out.println("You escape from the mine!");
+                                isDie = true;
+                                break;
+                            } else {
+                                System.out.println("You encountered a Skeleton!");
+                                System.out.println("You defeated the Skeleton using your " + listSword.get(0).name);
+                                for(int i = 0; i < 5; i++){
+                                    if(y == yEnemy[i] && x == xEnemy[i]){
+                                        yEnemy[i] = 0;
+                                        xEnemy[i] = 0;
+                                    }
+                                }
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == 'C'){
+                            if(listPickaxe.get(0).level < 3){
+                                System.out.println("You encountered a Creeper!");
+                                System.out.println("You " + listSword.get(0).name + " isn't strong enough to defeat the Creeper!");
+                                System.out.println("You escape from the mine!");
+                                isDie = true;
+                                break;
+                            } else {
+                                System.out.println("You encountered a Creeper!");
+                                System.out.println("You defeated the Creeper using your " + listSword.get(0).name);
+                                for(int i = 0; i < 5; i++){
+                                    if(y == yEnemy[i] && x == xEnemy[i]){
+                                        yEnemy[i] = 0;
+                                        xEnemy[i] = 0;
+                                    }
+                                }
+                            }
+                        }
                         if(currentMapGoMining[y][x] == '@'){
                             if(listPickaxe.get(0).level < 1){
                                 y++;
@@ -517,9 +592,63 @@ public class App {
                             y = 4;
                             x = 10;
                         }
-                    } else if(inputPlay.equals("a") && (currentMapGoMining[y][x-1] == ' ' || currentMapGoMining[y][x-1] == 'O' || currentMapGoMining[y][x-1] == '@' || currentMapGoMining[y][x-1] == '+' || currentMapGoMining[y][x-1] == '*')){
+                    } else if(inputPlay.equals("a") && (currentMapGoMining[y][x-1] == ' ' || currentMapGoMining[y][x-1] == 'O' || currentMapGoMining[y][x-1] == '@' || currentMapGoMining[y][x-1] == '+' || currentMapGoMining[y][x-1] == '*' || currentMapGoMining[y][x-1] == 'Z' || currentMapGoMining[y][x-1] == 'S' || currentMapGoMining[y][x-1] == 'C')){
                         currentMapGoMining[y][x] = ' ';
                         x--;
+                        if(currentMapGoMining[y][x] == 'Z'){
+                            if(listSword.get(0).level < 1){
+                                System.out.println("You encountered a Zombie!");
+                                System.out.println("You " + listSword.get(0).name + " isn't strong enough to defeat the Zombie!");
+                                System.out.println("You escape from the mine!");
+                                isDie = true;
+                                break;
+                            } else {
+                                System.out.println("You encountered a Zombie!");
+                                System.out.println("You defeated the Zombie using your " + listSword.get(0).name);
+                                for(int i = 0; i < 5; i++){
+                                    if(y == yEnemy[i] && x == xEnemy[i]){
+                                        yEnemy[i] = 0;
+                                        xEnemy[i] = 0;
+                                    }
+                                }
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == 'S'){
+                            if(listSword.get(0).level < 2){
+                                System.out.println("You encountered a Skeleton!");
+                                System.out.println("You " + listSword.get(0).name + " isn't strong enough to defeat the Skeleton!");
+                                System.out.println("You escape from the mine!");
+                                isDie = true;
+                                break;
+                            } else {
+                                System.out.println("You encountered a Skeleton!");
+                                System.out.println("You defeated the Skeleton using your " + listSword.get(0).name);
+                                for(int i = 0; i < 5; i++){
+                                    if(y == yEnemy[i] && x == xEnemy[i]){
+                                        yEnemy[i] = 0;
+                                        xEnemy[i] = 0;
+                                    }
+                                }
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == 'C'){
+                            if(listPickaxe.get(0).level < 3){
+                                System.out.println("You encountered a Creeper!");
+                                System.out.println("You " + listSword.get(0).name + " isn't strong enough to defeat the Creeper!");
+                                System.out.println("You escape from the mine!");
+                                isDie = true;
+                                break;
+                            } else {
+                                System.out.println("You encountered a Creeper!");
+                                System.out.println("You defeated the Creeper using your " + listSword.get(0).name);
+                                for(int i = 0; i < 5; i++){
+                                    if(y == yEnemy[i] && x == xEnemy[i]){
+                                        yEnemy[i] = 0;
+                                        xEnemy[i] = 0;
+                                    }
+                                }
+                            }
+                        }
                         if(currentMapGoMining[y][x] == '@'){
                             if(listPickaxe.get(0).level < 1){
                                 x++;
@@ -562,9 +691,63 @@ public class App {
                             y = 4;
                             x = 10;
                         }
-                    } else if(inputPlay.equals("s") && (currentMapGoMining[y+1][x] == ' ' || currentMapGoMining[y+1][x] == 'O' || currentMapGoMining[y+1][x] == '@' || currentMapGoMining[y+1][x] == '+' || currentMapGoMining[y+1][x] == '*')){
+                    } else if(inputPlay.equals("s") && (currentMapGoMining[y+1][x] == ' ' || currentMapGoMining[y+1][x] == 'O' || currentMapGoMining[y+1][x] == '@' || currentMapGoMining[y+1][x] == '+' || currentMapGoMining[y+1][x] == '*' || currentMapGoMining[y+1][x] == 'Z' || currentMapGoMining[y+1][x] == 'S' || currentMapGoMining[y+1][x] == 'C')){
                         currentMapGoMining[y][x] = ' ';
                         y++;
+                        if(currentMapGoMining[y][x] == 'Z'){
+                            if(listSword.get(0).level < 1){
+                                System.out.println("You encountered a Zombie!");
+                                System.out.println("You " + listSword.get(0).name + " isn't strong enough to defeat the Zombie!");
+                                System.out.println("You escape from the mine!");
+                                isDie = true;
+                                break;
+                            } else {
+                                System.out.println("You encountered a Zombie!");
+                                System.out.println("You defeated the Zombie using your " + listSword.get(0).name);
+                                for(int i = 0; i < 5; i++){
+                                    if(y == yEnemy[i] && x == xEnemy[i]){
+                                        yEnemy[i] = 0;
+                                        xEnemy[i] = 0;
+                                    }
+                                }
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == 'S'){
+                            if(listSword.get(0).level < 2){
+                                System.out.println("You encountered a Skeleton!");
+                                System.out.println("You " + listSword.get(0).name + " isn't strong enough to defeat the Skeleton!");
+                                System.out.println("You escape from the mine!");
+                                isDie = true;
+                                break;
+                            } else {
+                                System.out.println("You encountered a Skeleton!");
+                                System.out.println("You defeated the Skeleton using your " + listSword.get(0).name);
+                                for(int i = 0; i < 5; i++){
+                                    if(y == yEnemy[i] && x == xEnemy[i]){
+                                        yEnemy[i] = 0;
+                                        xEnemy[i] = 0;
+                                    }
+                                }
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == 'C'){
+                            if(listPickaxe.get(0).level < 3){
+                                System.out.println("You encountered a Creeper!");
+                                System.out.println("You " + listSword.get(0).name + " isn't strong enough to defeat the Creeper!");
+                                System.out.println("You escape from the mine!");
+                                isDie = true;
+                                break;
+                            } else {
+                                System.out.println("You encountered a Creeper!");
+                                System.out.println("You defeated the Creeper using your " + listSword.get(0).name);
+                                for(int i = 0; i < 5; i++){
+                                    if(y == yEnemy[i] && x == xEnemy[i]){
+                                        yEnemy[i] = 0;
+                                        xEnemy[i] = 0;
+                                    }
+                                }
+                            }
+                        }
                         if(currentMapGoMining[y][x] == '@'){
                             if(listPickaxe.get(0).level < 1){
                                 y--;
@@ -607,9 +790,63 @@ public class App {
                             y = 4;
                             x = 10;
                         }
-                    } else if(inputPlay.equals("d") && (currentMapGoMining[y][x+1] == ' ' || currentMapGoMining[y][x+1] == 'O' || currentMapGoMining[y][x+1] == '@' || currentMapGoMining[y][x+1] == '+' || currentMapGoMining[y][x+1] == '*')){
+                    } else if(inputPlay.equals("d") && (currentMapGoMining[y][x+1] == ' ' || currentMapGoMining[y][x+1] == 'O' || currentMapGoMining[y][x+1] == '@' || currentMapGoMining[y][x+1] == '+' || currentMapGoMining[y][x+1] == '*' || currentMapGoMining[y][x+1] == 'Z' || currentMapGoMining[y][x+1] == 'S'|| currentMapGoMining[y][x+1] == 'C')){
                         currentMapGoMining[y][x] = ' ';
                         x++;
+                        if(currentMapGoMining[y][x] == 'Z'){
+                            if(listSword.get(0).level < 1){
+                                System.out.println("You encountered a Zombie!");
+                                System.out.println("You " + listSword.get(0).name + " isn't strong enough to defeat the Zombie!");
+                                System.out.println("You escape from the mine!");
+                                isDie = true;
+                                break;
+                            } else {
+                                System.out.println("You encountered a Zombie!");
+                                System.out.println("You defeated the Zombie using your " + listSword.get(0).name);
+                                for(int i = 0; i < 5; i++){
+                                    if(y == yEnemy[i] && x == xEnemy[i]){
+                                        yEnemy[i] = 0;
+                                        xEnemy[i] = 0;
+                                    }
+                                }
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == 'S'){
+                            if(listSword.get(0).level < 2){
+                                System.out.println("You encountered a Skeleton!");
+                                System.out.println("You " + listSword.get(0).name + " isn't strong enough to defeat the Skeleton!");
+                                System.out.println("You escape from the mine!");
+                                isDie = true;
+                                break;
+                            } else {
+                                System.out.println("You encountered a Skeleton!");
+                                System.out.println("You defeated the Skeleton using your " + listSword.get(0).name);
+                                for(int i = 0; i < 5; i++){
+                                    if(y == yEnemy[i] && x == xEnemy[i]){
+                                        yEnemy[i] = 0;
+                                        xEnemy[i] = 0;
+                                    }
+                                }
+                            }
+                        }
+                        if(currentMapGoMining[y][x] == 'C'){
+                            if(listPickaxe.get(0).level < 3){
+                                System.out.println("You encountered a Creeper!");
+                                System.out.println("You " + listSword.get(0).name + " isn't strong enough to defeat the Creeper!");
+                                System.out.println("You escape from the mine!");
+                                isDie = true;
+                                break;
+                            } else {
+                                System.out.println("You encountered a Creeper!");
+                                System.out.println("You defeated the Creeper using your " + listSword.get(0).name);
+                                for(int i = 0; i < 5; i++){
+                                    if(y == yEnemy[i] && x == xEnemy[i]){
+                                        yEnemy[i] = 0;
+                                        xEnemy[i] = 0;
+                                    }
+                                }
+                            }
+                        }
                         if(currentMapGoMining[y][x] == '@'){
                             if(listPickaxe.get(0).level < 1){
                                 x--;
@@ -653,7 +890,7 @@ public class App {
                             x = 10;
                         }
                     }
-                } while (!inputPlay.equals("e") && levelOre < 4);
+                } while (!inputPlay.equals("e") && levelOre < 4 && !isDie);
                 levelOre = 1;
             } else if(menu1 == 555){
                 for(int i = 0; i < 5; i++){
